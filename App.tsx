@@ -11,6 +11,7 @@ import TransactionDetails from './pages/TransactionDetails';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Layout from './components/Layout';
+import IOSInstallBanner from './components/IOSInstallBanner';
 import { Transaction, TransactionType, TransactionCategory } from './types';
 import logo from './img/icone controle financeiro.png';
 
@@ -77,30 +78,33 @@ const App: React.FC = () => {
   const isAuthenticated = session !== false;
 
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/login" element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Login />
-        } />
-        <Route path="/signup" element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Signup />
-        } />
+    <>
+      <HashRouter>
+        <Routes>
+          <Route path="/login" element={
+            isAuthenticated ? <Navigate to="/" replace /> : <Login />
+          } />
+          <Route path="/signup" element={
+            isAuthenticated ? <Navigate to="/" replace /> : <Signup />
+          } />
 
-        <Route element={isAuthenticated ? <Layout /> : <Navigate to="/login" replace />}>
-          <Route index element={<Dashboard transactions={transactions} addTransaction={(t) => addTransactions([t])} deleteTransaction={deleteTransaction} />} />
-          <Route path="/reports" element={<Reports transactions={transactions} />} />
-          <Route path="/transactions" element={<Transactions transactions={transactions} deleteTransaction={deleteTransaction} />} />
-          <Route path="/profile" element={<Profile session={session as Session} />} />
-        </Route>
+          <Route element={isAuthenticated ? <Layout /> : <Navigate to="/login" replace />}>
+            <Route index element={<Dashboard transactions={transactions} addTransaction={(t) => addTransactions([t])} deleteTransaction={deleteTransaction} />} />
+            <Route path="/reports" element={<Reports transactions={transactions} />} />
+            <Route path="/transactions" element={<Transactions transactions={transactions} deleteTransaction={deleteTransaction} />} />
+            <Route path="/profile" element={<Profile session={session as Session} />} />
+          </Route>
 
-        <Route path="/transaction/new" element={
-          isAuthenticated ? <TransactionDetails onSave={addTransactions} /> : <Navigate to="/login" replace />
-        } />
-        <Route path="/transaction/edit/:id" element={
-          isAuthenticated ? <TransactionDetails onSave={(data) => updateTransaction(window.location.hash.split('/').pop() || '', data[0])} transactions={transactions} /> : <Navigate to="/login" replace />
-        } />
-      </Routes>
-    </HashRouter>
+          <Route path="/transaction/new" element={
+            isAuthenticated ? <TransactionDetails onSave={addTransactions} /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/transaction/edit/:id" element={
+            isAuthenticated ? <TransactionDetails onSave={(data) => updateTransaction(window.location.hash.split('/').pop() || '', data[0])} transactions={transactions} /> : <Navigate to="/login" replace />
+          } />
+        </Routes>
+      </HashRouter>
+      <IOSInstallBanner />
+    </>
   );
 };
 
